@@ -3,13 +3,11 @@
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+
 import styles from "./signup.module.css";
 import Link from "next/link";
 
 export default function SignupPage() {
-  const router = useRouter();
-
   const [user, setUser] = useState({
     username: "",
     email: "",
@@ -23,12 +21,12 @@ export default function SignupPage() {
       setLoading(true);
       const response = await axios.post("/api/user/auth/signup", user);
       console.log("Signup successful", response.data);
-      router.push("/signin");
+      toast.success("Please verify your email to complete registration");
+      setLoading(false);
+      setUser({ username: "", email: "", password: "" });
     } catch (error: unknown) {
-      console.log("Signup failed");
-      const message =
-        error instanceof Error ? error.message : "An error occurred";
-      toast.error(message);
+      toast.error("Signup failed. Please try again.");
+      console.error("Signup error", error);
     }
   };
 
