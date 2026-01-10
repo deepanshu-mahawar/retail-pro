@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import styles from "./ProductForm.module.css";
+import axios from "axios";
 
 export default function ProductForm() {
   const [formData, setFormData] = useState({
@@ -10,41 +11,63 @@ export default function ProductForm() {
     stock: "",
     category: "",
     description: "",
-    image: null as File | null,
+    // image: null as File | null,
   });
 
-  const [preview, setPreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  // const [preview, setPreview] = useState<string | null>(null);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // const handleChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setFormData({ ...formData, [name]: value });
+  // };
 
-    setFormData({ ...formData, image: file });
-    setPreview(URL.createObjectURL(file));
-  };
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  //   setFormData({ ...formData, image: file });
+  //   setPreview(URL.createObjectURL(file));
+  // };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("Product Data:", formData);
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/user/product", formData);
+      console.log("Product created successful", response.data);
+      setLoading(false);
+      setSuccess("Product created successfully");
+      setFormData({
+        name: "",
+        price: "",
+        stock: "",
+        category: "",
+        description: "",
+        // image: null as File | null,
+      });
+    } catch (error) {
+      console.log("Failed to create product:", error);
+      setError("Failed to create product");
+    }
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <h2>Add Product</h2>
+      {success && <p className={styles.success}>{success}</p>}
+      {error && <p className={styles.success}>{error}</p>}
+      <h2 >Add Product</h2>
 
-      <div className={styles.field}>
+      {/* <div className={styles.field}>
         <label>Product Image</label>
         <input type="file" accept="image/*" onChange={handleImageChange} />
         {preview && <img src={preview} alt="Preview" className={styles.preview} />}
-      </div>
+      </div> */}
 
       <div className={styles.field}>
         <label>Product Name</label>
@@ -52,7 +75,8 @@ export default function ProductForm() {
           type="text"
           name="name"
           value={formData.name}
-          onChange={handleChange}
+          // onChange={handleChange}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
         />
       </div>
@@ -64,7 +88,10 @@ export default function ProductForm() {
             type="number"
             name="price"
             value={formData.price}
-            onChange={handleChange}
+            // onChange={handleChange}
+            onChange={(e) =>
+              setFormData({ ...formData, price: e.target.value })
+            }
             required
           />
         </div>
@@ -75,7 +102,10 @@ export default function ProductForm() {
             type="number"
             name="stock"
             value={formData.stock}
-            onChange={handleChange}
+            // onChange={handleChange}
+            onChange={(e) =>
+              setFormData({ ...formData, stock: e.target.value })
+            }
             required
           />
         </div>
@@ -86,7 +116,10 @@ export default function ProductForm() {
         <select
           name="category"
           value={formData.category}
-          onChange={handleChange}
+          // onChange={handleChange}
+          onChange={(e) =>
+            setFormData({ ...formData, category: e.target.value })
+          }
           required
         >
           <option value="">Select Category</option>
@@ -102,7 +135,10 @@ export default function ProductForm() {
           name="description"
           rows={4}
           value={formData.description}
-          onChange={handleChange}
+          // onChange={handleChange}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
         />
       </div>
 

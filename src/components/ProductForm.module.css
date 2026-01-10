@@ -8,7 +8,9 @@
 
 .form h2 {
   margin-bottom: 20px;
-  text-align: center;
+  text-align: left;
+  font-weight: 700;
+  font-size: 24px;
 }
 
 .field {
@@ -57,3 +59,28 @@
 .button:hover {
   background: #0059c1;
 }
+
+.success {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  text-align: center;
+  font-size: 14px;
+  background-color: green;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.error {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  text-align: center;
+  font-size: 14px;
+  background-color: red;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+}
+

@@ -3,7 +3,7 @@
 import axios from "axios";
 import styles from "./dashboard.module.css";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import ProductForm from "@/components/ProductForm";
 
 interface User {
@@ -27,9 +27,9 @@ export default function DashboardPage() {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
-  const [activePage, setActivePage] = useState<"dashboard" | "addProduct">(
-    "dashboard"
-  );
+  const [activePage, setActivePage] = useState<
+    "dashboard" | "product" | "inventory"
+  >("dashboard");
 
   const getUserDetails = async () => {
     try {
@@ -82,21 +82,26 @@ export default function DashboardPage() {
           >
             Dashboard
           </a>
-          <a href="#" className={styles.menuItem}>
-            Users
+
+          <a
+            href="#"
+            onClick={() => setActivePage("product")}
+            className={styles.menuItem}
+          >
+            Product
           </a>
           <a
             href="#"
-            onClick={() => setActivePage("addProduct")}
+            onClick={() => setActivePage("inventory")}
             className={styles.menuItem}
           >
-            Add Product
+            Inventory
           </a>
           <a href="#" className={styles.menuItem}>
-            Orders
+            Sell
           </a>
           <a href="#" className={styles.menuItem}>
-            Settings
+            Profile
           </a>
         </nav>
 
@@ -111,8 +116,10 @@ export default function DashboardPage() {
             ? "Loading..."
             : activePage === "dashboard"
             ? "Dashboard"
-            : activePage === "addProduct"
-            ? "Add Product"
+            : activePage === "product"
+            ? "Product"
+            : activePage === "inventory"
+            ? "Inventory"
             : ""}
         </h1>
 
@@ -123,11 +130,17 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {activePage === "addProduct" && (
+        {activePage === "product" && (
           <div className={styles.contentBox}>
             <ProductForm />
           </div>
         )}
+
+        {activePage === "inventory" && (
+          <div className={styles.contentBox}>
+            Inventory
+          </div>
+        )} 
       </main>
     </div>
   );
