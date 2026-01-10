@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
 
 import styles from "./signup.module.css";
 import Link from "next/link";
@@ -15,17 +14,17 @@ export default function SignupPage() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const onSignup = async () => {
     try {
       setLoading(true);
       const response = await axios.post("/api/user/auth/signup", user);
       console.log("Signup successful", response.data);
-      toast.success("Please verify your email to complete registration");
       setLoading(false);
+      setSuccess(true);
       setUser({ username: "", email: "", password: "" });
     } catch (error: unknown) {
-      toast.error("Signup failed. Please try again.");
       console.error("Signup error", error);
     }
   };
@@ -33,7 +32,7 @@ export default function SignupPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>{loading ? "Processing" : "Register"}</h1>
+        <h1 className={styles.title}>Register</h1>
 
         <input
           className={styles.input}
@@ -63,12 +62,14 @@ export default function SignupPage() {
         />
 
         <button className={styles.button} onClick={onSignup}>
-          Register
+          {loading ? "Loading..." : "Register"}
         </button>
 
         <p className={styles.footer}>
           Already have an account? <Link href="/signin">Signin</Link>
         </p>
+
+        {success && <p className={styles.success}>Registration successful, Please verify your email.</p>}
       </div>
     </div>
   );

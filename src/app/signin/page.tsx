@@ -34,7 +34,7 @@ export default function LoginPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>{loading ? "Processing" : "Login"}</h1>
+        <h1 className={styles.title}>Signin</h1>
 
         <input
           className={styles.input}
@@ -55,7 +55,7 @@ export default function LoginPage() {
         />
 
         <button className={styles.button} onClick={onLogin}>
-          Login
+          {loading ? "Loading..." : "Signin"}
         </button>
 
         <p className={styles.footer}>

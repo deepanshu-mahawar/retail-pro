@@ -4,7 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import styles from "./VerifyEmail.module.css";
+import styles from "./verification.module.css";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
@@ -37,16 +37,18 @@ export default function VerifyEmailPage() {
         <button className={styles.button} onClick={verifyUserEmail}>
           Verify Email
         </button>
+
         {verified && (
           <div className={styles.successWrapper}>
             <h2 className={styles.successTitle}>
-              ✅ Email Verified Successfully
+              Email Verified Successfully
             </h2>
-            <Link href="/login" className={styles.button}>
-              Go to Login
+            <Link href="/signin" className={styles.button}>
+              Go to Signin
             </Link>
           </div>
         )}
+        
         {!token && (
           <p className={styles.error}>Invalid or missing verification token</p>
         )}

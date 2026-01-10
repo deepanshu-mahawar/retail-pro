@@ -77,3 +77,15 @@
 .footer a:hover {
   text-decoration: underline;
 }
+
+.success {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-align: center;
+  font-size: 14px;
+  background-color: green;
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+}
