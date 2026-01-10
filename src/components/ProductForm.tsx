@@ -61,7 +61,7 @@ export default function ProductForm() {
     <form className={styles.form} onSubmit={handleSubmit}>
       {success && <p className={styles.success}>{success}</p>}
       {error && <p className={styles.success}>{error}</p>}
-      <h2 >Add Product</h2>
+      <h2>Add Product</h2>
 
       {/* <div className={styles.field}>
         <label>Product Image</label>
@@ -143,7 +143,7 @@ export default function ProductForm() {
       </div>
 
       <button type="submit" className={styles.button}>
-        Save Product
+        {loading ? "Loading..." : "Save Product"}
       </button>
     </form>
   );

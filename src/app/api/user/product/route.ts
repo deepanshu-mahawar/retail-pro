@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       {
         message: "Products fetched successfully",
         success: true,
-        products,
+        data: products,
       },
       {
         status: 200,

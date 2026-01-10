@@ -17,19 +17,49 @@ interface User {
   verifyTokenExpiry: string;
 }
 
+export interface Product {
+  _id?: string;
+  name: string;
+  price: number;
+  stock: number;
+  category: string;
+  description: string;
+  userId: string;
+  __v?: number;
+}
+
 interface GetUserResponse {
   message: string;
   data: User;
+}
+
+interface GetProductResponse {
+  message: string;
+  data: Product[];
 }
 
 export default function DashboardPage() {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [user, setUser] = useState<User | null>(null);
+  const [products, setProducts] = useState<Product[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [activePage, setActivePage] = useState<
     "dashboard" | "product" | "inventory"
   >("dashboard");
+
+  const getProductsDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get<GetProductResponse>("/api/user/product");
+      console.log("Products fetched successfully", response.data.data);
+      setProducts(response.data.data);
+    } catch (error) {
+      console.log("Failed to fetch products", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getUserDetails = async () => {
     try {
@@ -58,6 +88,10 @@ export default function DashboardPage() {
 
   useEffect(() => {
     getUserDetails();
+  }, []);
+
+  useEffect(() => {
+    getProductsDetails();
   }, []);
 
   return (
@@ -138,9 +172,35 @@ export default function DashboardPage() {
 
         {activePage === "inventory" && (
           <div className={styles.contentBox}>
-            Inventory
+            <div className={styles.cardGrid}>
+              {products?.map((product) => (
+                <div key={product._id} className={styles.productCard}>
+                  <span className={styles.category}>{product.category}</span>
+
+                  <h3 className={styles.productName}>{product.name}</h3>
+
+                  <p className={styles.description}>{product.description}</p>
+
+                  <div className={styles.meta}>
+                    <span>₹ {product.price}</span>
+                    <span
+                      className={
+                        product.stock > 0 ? styles.inStock : styles.outOfStock
+                      }
+                    >
+                      Stock: {product.stock}
+                    </span>
+                  </div>
+
+                  <div className={styles.actions}>
+                    <button className={styles.primaryBtn}>Edit</button>
+                    <button className={styles.dangerBtn}>Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        )} 
+        )}
       </main>
     </div>
   );

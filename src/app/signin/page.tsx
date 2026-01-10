@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import styles from "@/app/signup/signup.module.css";
 import Link from "next/link";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function LoginPage() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const onLogin = async () => {
     try {
@@ -45,14 +47,23 @@ export default function LoginPage() {
           required
         />
 
-        <input
-          className={styles.input}
-          placeholder="Password"
-          type="password"
-          value={user.password}
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
-          required
-        />
+        <div className={styles.passwordWrapper}>
+          <input
+            className={styles.input}
+            placeholder="Password"
+            type={showPassword ? "text" : "password"}
+            value={user.password}
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
+          />
+
+          <button
+            type="button"
+            className={styles.eyeButton}
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+          </button>
+        </div>
 
         <button className={styles.button} onClick={onLogin}>
           {loading ? "Loading..." : "Signin"}
